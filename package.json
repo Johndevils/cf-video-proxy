@@ -1,0 +1,24 @@
+{
+  "name": "cf-video-proxy",
+  "version": "1.0.0",
+  "description": "A Cloudflare Worker proxy to bypass CORS and rewrite HLS playlists.",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "cf-typegen": "wrangler types"
+  },
+  "keywords": [
+    "cloudflare-workers",
+    "cors-proxy",
+    "hls-proxy",
+    "m3u8"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240208.0",
+    "typescript": "^5.3.3",
+    "wrangler": "^3.28.1"
+  }
+}
