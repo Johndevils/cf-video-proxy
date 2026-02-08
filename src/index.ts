@@ -1,110 +1,71 @@
-export interface Env {}
+interface Env {
+  RATELIMIT_KV: KVNamespace;
+}
 
 export default {
-  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
-    const requestUrl = new URL(request.url);
-    const workerBaseUrl = `${requestUrl.protocol}//${requestUrl.host}${requestUrl.pathname}`;
+  async fetch(request: Request, env: Env): Promise<Response> {
+    const url = new URL(request.url);
+    const clientIP = request.headers.get("cf-connecting-ip") || "anonymous";
 
-    // 1. Handle CORS Preflight (OPTIONS)
-    if (request.method === "OPTIONS") {
-      return new Response(null, {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "GET, HEAD, POST, OPTIONS",
-          "Access-Control-Allow-Headers": "Content-Type, Range, Authorization",
-          "Access-Control-Max-Age": "86400",
-        },
+    // 1. Rate Limiting Logic (100 req/min)
+    const limitKey = `rl:${clientIP}`;
+    const currentUsage = parseInt(await env.RATELIMIT_KV.get(limitKey) || "0");
+    
+    if (currentUsage >= 100) {
+      return new Response(JSON.stringify({ error: "Rate limit exceeded" }), {
+        status: 429,
+        headers: { "Content-Type": "application/json", "Retry-After": "60" }
       });
     }
+    await env.RATELIMIT_KV.put(limitKey, (currentUsage + 1).toString(), { expirationTtl: 60 });
 
-    // 2. Health Check
-    if (requestUrl.pathname === "/health") {
-      return new Response("OK", { status: 200, headers: { "Access-Control-Allow-Origin": "*" } });
+    // CORS Headers
+    const corsHeaders = {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, HEAD, POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Range",
+      "Access-Control-Expose-Headers": "Content-Range, Content-Length, Accept-Ranges",
+    };
+
+    if (request.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+
+    // 2. Validation Endpoint
+    if (url.pathname === "/api/validate" && request.method === "POST") {
+      try {
+        const { url: targetUrl } = await request.json() as { url: string };
+        const res = await fetch(targetUrl, { method: "HEAD" });
+        return new Response(JSON.stringify({
+          success: true,
+          accessible: res.ok,
+          contentType: res.headers.get("content-type"),
+          contentLength: res.headers.get("content-length"),
+          supportsRanges: res.headers.get("accept-ranges") === "bytes"
+        }), { headers: corsHeaders });
+      } catch (e) {
+        return new Response(JSON.stringify({ success: false }), { status: 400, headers: corsHeaders });
+      }
     }
 
-    // 3. Get and Validate Target URL
-    let targetUrl = requestUrl.searchParams.get("url");
+    // 3. Proxy Endpoint
+    if (url.pathname === "/api/proxy") {
+      const targetUrl = url.searchParams.get("url");
+      if (!targetUrl) return new Response("Missing URL", { status: 400 });
 
-    if (!targetUrl) {
-      return new Response(JSON.stringify({ error: "Missing 'url' query parameter" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
-      });
-    }
-
-    // --- SPECIAL HANDLER: Pixeldrain ---
-    if (targetUrl.includes("pixeldrain.com/u/")) {
-      targetUrl = targetUrl.replace("/u/", "/api/file/");
-    }
-
-    // 4. Prepare Headers for Upstream
-    const headers = new Headers();
-    const range = request.headers.get("Range");
-    if (range) headers.set("Range", range);
-
-    try {
-      const targetUrlObj = new URL(targetUrl);
-      headers.set("Referer", targetUrlObj.origin);
-      headers.set("Origin", targetUrlObj.origin);
-      headers.set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
-    } catch (e) {
-      return new Response(JSON.stringify({ error: "Invalid URL format" }), { status: 400, headers: { "Access-Control-Allow-Origin": "*" } });
-    }
-
-    try {
-      const response = await fetch(targetUrl, {
-        method: request.method,
-        headers: headers,
-        redirect: "follow",
-      });
-
-      const contentType = response.headers.get("Content-Type") || "";
-
-      // 5. HLS (.m3u8) REWRITER
-      if (
-        contentType.includes("application/vnd.apple.mpegurl") ||
-        contentType.includes("application/x-mpegURL") ||
-        targetUrl.endsWith(".m3u8")
-      ) {
-        const text = await response.text();
-        
-        const newText = text.replace(/^(?!#).+$/gm, (line) => {
-          const trimmedLine = line.trim();
-          if (!trimmedLine) return "";
-          const absoluteUrl = new URL(trimmedLine, targetUrl!).toString();
-          return `${workerBaseUrl}?url=${encodeURIComponent(absoluteUrl)}`;
-        });
-
-        return new Response(newText, {
-          status: response.status,
-          headers: {
-            "Content-Type": contentType,
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Expose-Headers": "*",
-            "Cache-Control": "no-cache"
-          }
-        });
+      // Security: Block private IPs (simplified check)
+      if (targetUrl.includes("localhost") || targetUrl.includes("127.0.0.1")) {
+        return new Response("Forbidden", { status: 403 });
       }
 
-      // 6. Standard Binary Stream
-      const newHeaders = new Headers(response.headers);
-      newHeaders.set("Access-Control-Allow-Origin", "*");
-      newHeaders.set("Access-Control-Expose-Headers", "*");
-      newHeaders.delete("X-Frame-Options");
-      newHeaders.delete("Content-Security-Policy");
-      newHeaders.delete("X-Content-Type-Options");
-
-      return new Response(response.body, {
-        status: response.status,
-        statusText: response.statusText,
-        headers: newHeaders,
+      const range = request.headers.get("Range");
+      const proxyResponse = await fetch(targetUrl, {
+        headers: { ...(range && { Range: range }) }
       });
 
-    } catch (e: any) {
-      return new Response(JSON.stringify({ error: "Stream Failed", details: e.message }), {
-        status: 502,
-        headers: { "Access-Control-Allow-Origin": "*" },
-      });
+      const newResponse = new Response(proxyResponse.body, proxyResponse);
+      Object.entries(corsHeaders).forEach(([k, v]) => newResponse.headers.set(k, v));
+      return newResponse;
     }
-  },
+
+    return new Response("Not Found", { status: 404 });
+  }
 };
