@@ -16,9 +16,12 @@ export default {
       });
     }
     
+    // Base URL for your GitHub repository
+    const githubBaseUrl = 'https://raw.githubusercontent.com/Johndevils/cf-video-proxy/main/public';
+    
     // Route handling
     if (url.pathname === '/' || url.pathname === '') {
-      const html = await fetch(`https://raw.githubusercontent.com/yourusername/arsystream/main/public/index.html`);
+      const html = await fetch(`${githubBaseUrl}/index.html`);
       return new Response(await html.text(), {
         headers: {
           ...corsHeaders,
@@ -29,7 +32,7 @@ export default {
     }
     
     if (url.pathname === '/style.css') {
-      const css = await fetch(`https://raw.githubusercontent.com/yourusername/arsystream/main/public/style.css`);
+      const css = await fetch(`${githubBaseUrl}/style.css`);
       return new Response(await css.text(), {
         headers: {
           ...corsHeaders,
@@ -40,7 +43,7 @@ export default {
     }
     
     if (url.pathname === '/player.js') {
-      const js = await fetch(`https://raw.githubusercontent.com/yourusername/arsystream/main/public/player.js`);
+      const js = await fetch(`${githubBaseUrl}/player.js`);
       return new Response(await js.text(), {
         headers: {
           ...corsHeaders,
