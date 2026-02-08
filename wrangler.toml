@@ -9,7 +9,3 @@ entry-point = "src"
 
 [build]
 command = "npm run build"
-
-[[r2_buckets]]
-binding = "MEDIA_BUCKET"
-bucket_name = "arsystream-media"
