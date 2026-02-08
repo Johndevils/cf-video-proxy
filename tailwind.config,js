@@ -1,7 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./public/**/*.html'],
-  darkMode: 'class',
+  content: ['./public/**/*.html', './src/**/*.css'],
   theme: {
     extend: {
       colors: {
@@ -17,7 +16,7 @@ module.exports = {
         'arsy-border': '#7F1D1D',
       },
       animation: {
-        'spin-slow': 'spin 1.2s cubic-bezier(0.5, 0.1, 0.5, 0.9) infinite',
+        'spin-slow': 'spin 1.2s linear infinite',
         'fade-in': 'fadeIn 0.6s ease-out',
         'slide-up': 'slideUp 0.3s ease-out',
         'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
@@ -43,9 +42,6 @@ module.exports = {
       },
       backdropBlur: {
         'xs': '2px',
-      },
-      aspectRatio: {
-        'video': '16 / 9',
       },
     },
   },
