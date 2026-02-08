@@ -1,0 +1,131 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom CSS for video player */
+@layer base {
+  * {
+    @apply m-0 p-0 box-border;
+  }
+
+  body {
+    @apply bg-black text-white font-sans min-h-screen flex flex-col;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-900 rounded;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-arsy-red rounded hover:bg-arsy-dark-red;
+  }
+
+  /* Selection color */
+  ::selection {
+    @apply bg-arsy-red/30 text-white;
+  }
+
+  /* Focus styles */
+  *:focus {
+    @apply outline-none ring-2 ring-arsy-red ring-offset-2 ring-offset-black;
+  }
+
+  *:focus:not(.focus-visible) {
+    @apply outline-none ring-0;
+  }
+}
+
+@layer components {
+  /* Button styles */
+  .btn-primary {
+    @apply px-8 py-3.5 bg-gradient-to-br from-arsy-red to-arsy-dark-red 
+           text-white font-semibold rounded-xl shadow-arsy-red 
+           hover:shadow-lg hover:shadow-arsy-red/40 transition-all duration-300
+           hover:scale-105 active:scale-95 uppercase tracking-wide
+           border border-arsy-dark-red focus:ring-2 focus:ring-arsy-red focus:ring-offset-2;
+  }
+
+  .btn-secondary {
+    @apply px-8 py-3.5 border-2 border-arsy-red text-arsy-red font-semibold
+           rounded-xl hover:bg-arsy-red/10 transition-all duration-300
+           hover:scale-105 active:scale-95 uppercase tracking-wide
+           focus:ring-2 focus:ring-arsy-red focus:ring-offset-2;
+  }
+
+  /* Input styles */
+  .input-primary {
+    @apply w-full px-6 py-4 bg-black border-2 border-arsy-red rounded-xl
+           text-white placeholder-gray-500 font-mono text-base
+           focus:border-arsy-dark-red focus:ring-2 focus:ring-arsy-red/20
+           transition-all duration-300 outline-none;
+  }
+
+  /* Card styles */
+  .card {
+    @apply bg-gray-900/90 backdrop-blur-sm rounded-2xl border border-gray-800
+           shadow-arsy p-8 animate-fade-in;
+  }
+
+  /* Control button */
+  .control-btn {
+    @apply p-2.5 rounded-lg text-white hover:bg-white/10 hover:text-arsy-red
+           transition-all duration-300 hover:scale-110 focus:ring-2
+           focus:ring-arsy-red focus:outline-none disabled:opacity-40
+           disabled:cursor-not-allowed disabled:hover:scale-100
+           disabled:hover:bg-transparent disabled:hover:text-white;
+  }
+
+  /* Play/Pause button */
+  .play-pause-btn {
+    @apply w-14 h-14 rounded-full bg-gradient-to-br from-arsy-red to-arsy-dark-red
+           flex items-center justify-center text-white text-2xl shadow-arsy-red
+           hover:scale-110 transition-transform duration-300 focus:ring-2
+           focus:ring-arsy-red focus:outline-none;
+  }
+
+  /* Progress bar */
+  .progress-bar {
+    @apply w-full h-2 bg-gray-800 rounded-full overflow-hidden relative;
+  }
+
+  .progress-current {
+    @apply absolute h-full bg-gradient-to-r from-arsy-red to-pink-600 rounded-full;
+  }
+
+  .progress-buffered {
+    @apply absolute h-full bg-gray-700 rounded-full;
+  }
+
+  /* Volume slider */
+  .volume-slider {
+    @apply w-24 h-1.5 bg-gray-700 rounded-full appearance-none cursor-pointer
+           [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-4
+           [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:rounded-full
+           [&::-webkit-slider-thumb]:bg-arsy-red [&::-webkit-slider-thumb]:shadow-lg
+           [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4
+           [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-arsy-red
+           [&::-moz-range-thumb]:border-0;
+  }
+
+  /* Spinner */
+  .spinner {
+    @apply w-16 h-16 border-4 border-gray-800 border-t-arsy-red rounded-full
+           animate-spin-slow shadow-arsy-glow;
+  }
+
+  /* Toast notification */
+  .toast {
+    @apply fixed top-4 right-4 bg-gray-900 text-white px-6 py-3 rounded-xl
+           shadow-lg border-l-4 border-arsy-red transform translate-x-full
+           transition-transform duration-300 z-50 max-w-md;
+  }
+
+  .toast.show {
+    @apply translate-x-0;
+  }
+}
