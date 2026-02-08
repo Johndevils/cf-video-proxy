@@ -1,4 +1,7 @@
-name = "cf-video-proxy"
-main = "src/index.ts"
+name = "arsystream"
+main = "src/index.js"
 compatibility_date = "2024-01-01"
 
+[site]
+bucket = "./public"
+entry-point = "."
