@@ -1,8 +1,10 @@
-name = "arsystream"
+name = "cf-video-proxy"
 main = "src/index.js"
 compatibility_date = "2024-01-01"
-workers_dev = true
 
 [site]
 bucket = "./public"
 entry-point = "src"
+
+[vars]
+NODE_VERSION = "20"
