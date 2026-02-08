@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arsystream - Online Video Player</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>▶️</text></svg>">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <h1 class="logo">ARSYSTREAM</h1>
+            <p class="tagline">Paste. Play. Stream.</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <!-- URL Input Section -->
+            <div class="input-section">
+                <input 
+                    type="text" 
+                    id="urlInput" 
+                    placeholder="Paste video URL here... (MP4, HLS, M3U8, etc.)"
+                    aria-label="Video URL input"
+                    autocomplete="off"
+                >
+                <div class="examples">
+                    <small>Examples: MP4, HLS (.m3u8), Live Streams, Token URLs</small>
+                </div>
+                <div class="button-group">
+                    <button id="playBtn" class="btn-primary">▶ Play Video</button>
+                    <button id="clearBtn" class="btn-secondary">Clear</button>
+                    <button id="playlistBtn" class="btn-secondary">Load Playlist</button>
+                </div>
+            </div>
+
+            <!-- Video Player Section -->
+            <div class="player-wrapper">
+                <div id="loader" class="loader hidden">
+                    <div class="spinner"></div>
+                    <p>Loading video...</p>
+                </div>
+                
+                <video 
+                    id="videoPlayer" 
+                    class="video-player"
+                    preload="auto"
+                    playsinline
+                    webkit-playsinline
+                >
+                    Your browser does not support video playback.
+                </video>
+
+                <!-- Custom Controls -->
+                <div id="controls" class="controls hidden">
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-buffered"></div>
+                            <div class="progress-current"></div>
+                            <input type="range" id="progressSlider" min="0" max="100" value="0" class="progress-slider">
+                        </div>
+                        <div class="time-info">
+                            <span id="currentTime" class="time">00:00</span>
+                            <span id="totalTime" class="time">00:00</span>
+                        </div>
+                    </div>
+                    
+                    <div class="controls-bottom">
+                        <div class="controls-left">
+                            <button id="prevBtn" class="control-btn" title="Previous (p)" disabled>⏮</button>
+                            <button id="playPauseBtn" class="control-btn play-pause" title="Play/Pause (Space)">▶</button>
+                            <button id="nextBtn" class="control-btn" title="Next (n)" disabled>⏭</button>
+                            <span id="videoTitle" class="video-title"></span>
+                        </div>
+                        
+                        <div class="controls-right">
+                            <div class="volume-container">
+                                <button id="muteBtn" class="control-btn" title="Mute (m)">🔊</button>
+                                <input type="range" id="volumeSlider" min="0" max="100" value="100" class="volume-slider" title="Volume">
+                            </div>
+                            <button id="fullscreenBtn" class="control-btn" title="Fullscreen (f)">⛶</button>
+                            <button id="settingsBtn" class="control-btn" title="Settings">⚙️</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Error Message -->
+                <div id="errorMsg" class="error-message hidden">
+                    <div class="error-icon">⚠️</div>
+                    <p id="errorText">Failed to load video. Please check the URL and try again.</p>
+                    <button id="retryBtn" class="btn-primary">Retry</button>
+                </div>
+            </div>
+
+            <!-- Playlist Section -->
+            <div id="playlistSection" class="playlist-section hidden">
+                <h3>Playlist</h3>
+                <textarea 
+                    id="playlistInput" 
+                    placeholder='["https://example.com/video1.mp4", "https://example.com/video2.mp4"]'
+                    rows="4"
+                ></textarea>
+                <div class="playlist-buttons">
+                    <button id="loadPlaylistBtn" class="btn-primary">Load Playlist</button>
+                    <button id="closePlaylistBtn" class="btn-secondary">Close</button>
+                </div>
+            </div>
+
+            <!-- Instructions -->
+            <div class="instructions">
+                <h3>How to use:</h3>
+                <ul>
+                    <li>Paste a video URL and click "Play Video"</li>
+                    <li>Supports MP4, HLS (.m3u8), Live Streams, and more</li>
+                    <li>Keyboard shortcuts: Space (play/pause), F (fullscreen), M (mute)</li>
+                    <li>For playlists, use JSON format or load multiple URLs</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>Arsystream v1.0 • Simple Online Video Player</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="player.js"></script>
+</body>
+</html>
