@@ -1,14 +1,4 @@
-name = "cf-video-proxy"
+name = "arsystream-proxy"
 main = "src/index.ts"
-compatibility_date = "2024-02-08"
+compatibility_date = "2024-01-01"
 
-# Optional: Enable simple logs for debugging
-[observability]
-enabled = true
-
-# PLACEMENT OPTIMIZATION
-# Since this acts as a proxy fetching from origin servers, 
-# 'Smart Placement' can speed up requests by running the worker 
-# closer to the target server rather than the user.
-[placement]
-mode = "smart"
