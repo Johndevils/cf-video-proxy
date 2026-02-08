@@ -4,157 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arsystream - Online Video Player</title>
-    <meta name="description" content="Simple web-based video player. Paste. Play. Stream.">
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 fill=%22%23DC2626%22>▶</text></svg>">
-    <style>
-        /* Custom CSS that can't be done with Tailwind */
-        #videoPlayer::-webkit-media-controls {
-            display: none !important;
-        }
-        
-        .controls-hide {
-            opacity: 0;
-            transform: translateY(20px);
-            pointer-events: none;
-        }
-        
-        .controls-show {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: all;
-        }
-        
-        #progressSlider {
-            -webkit-appearance: none;
-            appearance: none;
-            background: transparent;
-            cursor: pointer;
-            width: 100%;
-            height: 8px;
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 30;
-        }
-        
-        #progressSlider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            height: 20px;
-            width: 20px;
-            background: #DC2626;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 3px solid white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-        }
-        
-        #progressSlider::-moz-range-thumb {
-            height: 20px;
-            width: 20px;
-            background: #DC2626;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 3px solid white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-        }
-        
-        /* Hide default video controls */
-        video::-webkit-media-controls-panel {
-            display: none !important;
-        }
-        
-        video::-webkit-media-controls-play-button {
-            display: none !important;
-        }
-        
-        video::-webkit-media-controls-start-playback-button {
-            display: none !important;
-        }
-    </style>
 </head>
 <body class="bg-black text-white min-h-screen flex flex-col">
     <!-- Header -->
-    <header class="bg-gray-900 border-b-2 border-arsy-red py-4 shadow-lg">
+    <header class="bg-gray-900 border-b-2 border-red-600 py-4">
         <div class="container mx-auto px-4">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between">
-                <div class="mb-2 md:mb-0">
-                    <h1 class="text-3xl md:text-4xl font-bold text-arsy-red tracking-wider uppercase">ARSYSTREAM</h1>
-                    <p class="text-gray-400 text-sm md:text-base mt-1">Paste. Play. Stream.</p>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <button id="themeToggle" class="control-btn text-xl" title="Toggle theme">
-                        🌓
-                    </button>
-                    <button id="settingsBtn" class="control-btn text-xl" title="Settings">
-                        ⚙️
-                    </button>
-                </div>
-            </div>
+            <h1 class="text-3xl font-bold text-red-600 uppercase">ARSYSTREAM</h1>
+            <p class="text-gray-400">Paste. Play. Stream.</p>
         </div>
     </header>
 
     <!-- Main Content -->
     <main class="flex-1 container mx-auto px-4 py-8">
-        <div class="max-w-6xl mx-auto">
-            <!-- URL Input Card -->
-            <div class="card mb-8">
-                <div class="mb-6">
-                    <h2 class="text-2xl font-bold text-arsy-red mb-2">Enter Video URL</h2>
-                    <p class="text-gray-400">Supports MP4, HLS (.m3u8), Live Streams, and more</p>
-                </div>
-                
-                <div class="space-y-4">
-                    <input 
-                        type="text" 
-                        id="urlInput" 
-                        class="input-primary"
-                        placeholder="Paste video URL here... (e.g., https://example.com/video.mp4)"
-                        autocomplete="off"
-                        spellcheck="false"
-                    >
-                    
-                    <div class="flex flex-wrap gap-3 pt-2">
-                        <button id="playBtn" class="btn-primary flex-1 min-w-[160px]">
-                            <span class="flex items-center justify-center">
-                                <span class="mr-2">▶</span>
-                                <span>Play Video</span>
-                            </span>
-                        </button>
-                        <button id="clearBtn" class="btn-secondary flex-1 min-w-[120px]">
-                            Clear
-                        </button>
-                        <button id="playlistBtn" class="btn-secondary flex-1 min-w-[140px]">
-                            Load Playlist
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Quick Examples -->
-                <div class="mt-6 pt-6 border-t border-gray-800">
-                    <p class="text-gray-400 text-sm mb-3">Quick Examples:</p>
-                    <div class="flex flex-wrap gap-2">
-                        <button class="example-btn text-xs px-3 py-1.5 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors" data-url="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4">
-                            Sample MP4
-                        </button>
-                        <button class="example-btn text-xs px-3 py-1.5 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors" data-url="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8">
-                            Sample HLS
-                        </button>
-                        <button class="example-btn text-xs px-3 py-1.5 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors" data-url="https://bitdash-a.akamaihd.net/s/content/media/Manifest_1080p.mpd">
-                            Sample DASH
-                        </button>
-                    </div>
+        <div class="max-w-4xl mx-auto">
+            <!-- URL Input -->
+            <div class="bg-gray-900 p-6 rounded-xl border border-gray-800 mb-8">
+                <input 
+                    type="text" 
+                    id="urlInput" 
+                    class="w-full px-4 py-3 bg-black border-2 border-red-600 rounded-lg text-white mb-4"
+                    placeholder="Paste video URL here..."
+                >
+                <div class="flex gap-4">
+                    <button id="playBtn" class="btn-primary flex-1">▶ Play</button>
+                    <button id="clearBtn" class="btn-secondary flex-1">Clear</button>
                 </div>
             </div>
 
             <!-- Video Player -->
-            <div class="card p-0 overflow-hidden relative aspect-video bg-black">
+            <div class="bg-black border-2 border-gray-800 rounded-xl overflow-hidden relative aspect-video mb-8">
                 <!-- Loading Spinner -->
-                <div id="loader" class="hidden absolute inset-0 flex flex-col items-center justify-center bg-black/90 z-50">
-                    <div class="spinner mb-4"></div>
-                    <p class="text-gray-300 text-lg font-medium">Loading video...</p>
-                    <p class="text-gray-500 text-sm mt-2" id="loadStatus">Initializing player</p>
+                <div id="loader" class="hidden absolute inset-0 flex items-center justify-center bg-black/90">
+                    <div class="spinner"></div>
                 </div>
                 
                 <!-- Video Element -->
@@ -163,211 +45,42 @@
                     class="w-full h-full"
                     preload="auto"
                     playsinline
-                    webkit-playsinline
-                    crossorigin="anonymous"
-                >
-                    Your browser does not support HTML5 video.
-                </video>
+                ></video>
                 
-                <!-- Error Message -->
-                <div id="errorMsg" class="hidden absolute inset-0 flex flex-col items-center justify-center bg-black/90 z-40 p-6">
-                    <div class="text-5xl mb-4">⚠️</div>
-                    <p id="errorText" class="text-xl text-center text-gray-300 mb-6 max-w-lg">
-                        Failed to load video. Please check the URL and try again.
-                    </p>
-                    <div class="flex gap-4">
-                        <button id="retryBtn" class="btn-primary">Retry</button>
-                        <button id="closeErrorBtn" class="btn-secondary">Close</button>
+                <!-- Controls -->
+                <div id="controls" class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4">
+                    <div class="progress-bar mb-2">
+                        <div class="progress-current" id="progressCurrent"></div>
+                        <input type="range" id="progressSlider" min="0" max="100" value="0" class="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer">
                     </div>
-                </div>
-                
-                <!-- Custom Controls -->
-                <div id="controls" class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 pt-8 transition-all duration-300 controls-show">
-                    <!-- Progress Bar -->
-                    <div class="mb-4">
-                        <div class="progress-bar mb-1 relative">
-                            <div class="progress-buffered" id="progressBuffered"></div>
-                            <div class="progress-current" id="progressCurrent"></div>
-                            <input type="range" id="progressSlider" min="0" max="100" value="0" step="0.1">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center gap-2">
+                            <button id="playPauseBtn" class="control-btn text-xl">▶</button>
+                            <span id="currentTime" class="text-sm text-gray-400">00:00</span>
                         </div>
-                        <div class="flex justify-between text-sm text-gray-400 font-mono">
-                            <span id="currentTime">00:00</span>
-                            <span id="totalTime">00:00</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Control Buttons -->
-                    <div class="flex items-center justify-between">
-                        <!-- Left Controls -->
-                        <div class="flex items-center space-x-4">
-                            <button id="prevBtn" class="control-btn text-xl" title="Previous (P)" disabled>
-                                ⏮
-                            </button>
-                            <button id="playPauseBtn" class="play-pause-btn" title="Play/Pause (Space)">
-                                <span id="playIcon">▶</span>
-                            </button>
-                            <button id="nextBtn" class="control-btn text-xl" title="Next (N)" disabled>
-                                ⏭
-                            </button>
-                            
-                            <div class="flex items-center space-x-2 ml-2">
-                                <button id="muteBtn" class="control-btn text-lg" title="Mute (M)">
-                                    <span id="volumeIcon">🔊</span>
-                                </button>
-                                <input type="range" id="volumeSlider" min="0" max="100" value="100" class="volume-slider" title="Volume">
-                            </div>
-                        </div>
-                        
-                        <!-- Right Controls -->
-                        <div class="flex items-center space-x-3">
-                            <div class="text-sm text-gray-300 px-3 py-1.5 bg-gray-800/50 rounded-lg" id="videoInfo">
-                                <span id="videoTitle">Ready to play</span>
-                                <span id="videoResolution" class="text-xs text-gray-400 ml-2"></span>
-                            </div>
-                            
-                            <button id="pipBtn" class="control-btn text-lg" title="Picture-in-Picture">
-                                📺
-                            </button>
-                            <button id="fullscreenBtn" class="control-btn text-xl" title="Fullscreen (F)">
-                                <span id="fullscreenIcon">⛶</span>
-                            </button>
+                        <div class="flex items-center gap-4">
+                            <button id="muteBtn" class="control-btn text-xl">🔊</button>
+                            <input type="range" id="volumeSlider" min="0" max="100" value="100" class="volume-slider">
+                            <button id="fullscreenBtn" class="control-btn text-xl">⛶</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Playlist Section (Hidden by default) -->
-            <div id="playlistSection" class="card mt-8 hidden">
-                <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-2xl font-bold text-arsy-red">Playlist</h2>
-                    <button id="closePlaylistBtn" class="control-btn text-lg">✕</button>
-                </div>
-                
-                <div class="space-y-4">
-                    <textarea 
-                        id="playlistInput" 
-                        class="input-primary font-mono text-sm h-32"
-                        placeholder='Paste playlist URLs (one per line or JSON array):
-[
-  "https://example.com/video1.mp4",
-  "https://example.com/video2.mp4"
-]'
-                        spellcheck="false"
-                    ></textarea>
-                    
-                    <div class="flex flex-wrap gap-3">
-                        <button id="loadPlaylistBtn" class="btn-primary flex-1 min-w-[160px]">
-                            Load Playlist
-                        </button>
-                        <button id="clearPlaylistBtn" class="btn-secondary flex-1 min-w-[140px]">
-                            Clear Playlist
-                        </button>
-                    </div>
-                    
-                    <div id="playlistItems" class="space-y-2 max-h-60 overflow-y-auto p-2 hidden">
-                        <!-- Playlist items will be added here dynamically -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Instructions -->
-            <div class="card mt-8">
-                <h2 class="text-2xl font-bold text-arsy-red mb-4">How to Use</h2>
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="space-y-3">
-                        <h3 class="text-lg font-semibold text-gray-300">📋 Supported Formats</h3>
-                        <ul class="space-y-2 text-gray-400">
-                            <li class="flex items-start">
-                                <span class="text-arsy-red mr-2">▶</span>
-                                <span>MP4 videos (direct links)</span>
-                            </li>
-                            <li class="flex items-start">
-                                <span class="text-arsy-red mr-2">▶</span>
-                                <span>HLS streams (.m3u8)</span>
-                            </li>
-                            <li class="flex items-start">
-                                <span class="text-arsy-red mr-2">▶</span>
-                                <span>Live streaming URLs</span>
-                            </li>
-                            <li class="flex items-start">
-                                <span class="text-arsy-red mr-2">▶</span>
-                                <span>Token-authenticated URLs</span>
-                            </li>
-                        </ul>
-                    </div>
-                    
-                    <div class="space-y-3">
-                        <h3 class="text-lg font-semibold text-gray-300">⌨️ Keyboard Shortcuts</h3>
-                        <ul class="space-y-2 text-gray-400">
-                            <li class="flex justify-between">
-                                <span>Space</span>
-                                <span class="text-gray-300">Play/Pause</span>
-                            </li>
-                            <li class="flex justify-between">
-                                <span>F</span>
-                                <span class="text-gray-300">Fullscreen</span>
-                            </li>
-                            <li class="flex justify-between">
-                                <span>M</span>
-                                <span class="text-gray-300">Mute/Unmute</span>
-                            </li>
-                            <li class="flex justify-between">
-                                <span>← →</span>
-                                <span class="text-gray-300">Seek 10s</span>
-                            </li>
-                            <li class="flex justify-between">
-                                <span>↑ ↓</span>
-                                <span class="text-gray-300">Volume</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="mt-6 pt-6 border-t border-gray-800">
-                    <h3 class="text-lg font-semibold text-gray-300 mb-3">💡 Tips</h3>
-                    <ul class="space-y-2 text-gray-400">
-                        <li class="flex items-start">
-                            <span class="text-arsy-red mr-2">•</span>
-                            <span>You can drag and drop URLs directly into the input field</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-arsy-red mr-2">•</span>
-                            <span>Use JSON format for playlists with multiple videos</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-arsy-red mr-2">•</span>
-                            <span>Hover over controls to see tooltips</span>
-                        </li>
-                    </ul>
-                </div>
+            <!-- Error Message -->
+            <div id="errorMsg" class="hidden bg-red-900/20 border border-red-600 rounded-xl p-6 text-center mb-8">
+                <p id="errorText" class="text-red-400 mb-4">Failed to load video</p>
+                <button id="retryBtn" class="btn-primary">Retry</button>
             </div>
         </div>
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 border-t border-gray-800 py-6 mt-8">
-        <div class="container mx-auto px-4">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between">
-                <p class="text-gray-400 text-center md:text-left">
-                    Arsystream v1.0 • Simple Online Video Player
-                </p>
-                <div class="flex justify-center md:justify-end space-x-4 mt-4 md:mt-0">
-                    <button id="aboutBtn" class="text-gray-400 hover:text-arsy-red transition-colors text-sm">
-                        About
-                    </button>
-                    <button id="shortcutsBtn" class="text-gray-400 hover:text-arsy-red transition-colors text-sm">
-                        Shortcuts
-                    </button>
-                    <button id="githubBtn" class="text-gray-400 hover:text-arsy-red transition-colors text-sm">
-                        GitHub
-                    </button>
-                </div>
-            </div>
+    <footer class="bg-gray-900 py-4 mt-8">
+        <div class="container mx-auto px-4 text-center text-gray-400">
+            Arsystream v1.0 • Simple Online Video Player
         </div>
     </footer>
-
-    <!-- Toast Container -->
-    <div id="toastContainer" class="fixed top-4 right-4 z-50 space-y-2"></div>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
