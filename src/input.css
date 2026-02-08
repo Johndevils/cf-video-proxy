@@ -5,7 +5,9 @@
 /* Custom CSS for video player */
 @layer base {
   * {
-    @apply m-0 p-0 box-border;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
   }
 
   body {
@@ -14,7 +16,8 @@
 
   /* Custom scrollbar */
   ::-webkit-scrollbar {
-    @apply w-2 h-2;
+    width: 10px;
+    height: 10px;
   }
 
   ::-webkit-scrollbar-track {
@@ -22,70 +25,100 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-arsy-red rounded hover:bg-arsy-dark-red;
+    background-color: #DC2626;
+    border-radius: 0.25rem;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #991B1B;
   }
 
   /* Selection color */
   ::selection {
-    @apply bg-arsy-red/30 text-white;
+    background-color: rgba(220, 38, 38, 0.3);
+    color: white;
   }
 
   /* Focus styles */
   *:focus {
-    @apply outline-none ring-2 ring-arsy-red ring-offset-2 ring-offset-black;
+    outline: none;
+    box-shadow: 0 0 0 2px #DC2626, 0 0 0 4px #000000;
   }
 
   *:focus:not(.focus-visible) {
-    @apply outline-none ring-0;
+    outline: none;
+    box-shadow: none;
   }
 }
 
 @layer components {
   /* Button styles */
   .btn-primary {
-    @apply px-8 py-3.5 bg-gradient-to-br from-arsy-red to-arsy-dark-red 
-           text-white font-semibold rounded-xl shadow-arsy-red 
-           hover:shadow-lg hover:shadow-arsy-red/40 transition-all duration-300
+    @apply px-8 py-3.5 text-white font-semibold rounded-xl transition-all duration-300
            hover:scale-105 active:scale-95 uppercase tracking-wide
-           border border-arsy-dark-red focus:ring-2 focus:ring-arsy-red focus:ring-offset-2;
+           focus:ring-2 focus:outline-none;
+    background: linear-gradient(135deg, #DC2626, #991B1B);
+    box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+    border: 1px solid #991B1B;
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
   }
 
   .btn-secondary {
-    @apply px-8 py-3.5 border-2 border-arsy-red text-arsy-red font-semibold
-           rounded-xl hover:bg-arsy-red/10 transition-all duration-300
+    @apply px-8 py-3.5 font-semibold rounded-xl transition-all duration-300
            hover:scale-105 active:scale-95 uppercase tracking-wide
-           focus:ring-2 focus:ring-arsy-red focus:ring-offset-2;
+           focus:ring-2 focus:outline-none;
+    border: 2px solid #DC2626;
+    color: #DC2626;
+  }
+
+  .btn-secondary:hover {
+    background-color: rgba(220, 38, 38, 0.1);
   }
 
   /* Input styles */
   .input-primary {
-    @apply w-full px-6 py-4 bg-black border-2 border-arsy-red rounded-xl
+    @apply w-full px-6 py-4 bg-black border-2 rounded-xl
            text-white placeholder-gray-500 font-mono text-base
-           focus:border-arsy-dark-red focus:ring-2 focus:ring-arsy-red/20
            transition-all duration-300 outline-none;
+    border-color: #DC2626;
+  }
+
+  .input-primary:focus {
+    border-color: #991B1B;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
   }
 
   /* Card styles */
   .card {
-    @apply bg-gray-900/90 backdrop-blur-sm rounded-2xl border border-gray-800
-           shadow-arsy p-8 animate-fade-in;
+    @apply bg-gray-900/90 backdrop-blur-sm rounded-2xl border border-gray-800 p-8;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+    animation: fadeIn 0.6s ease-out;
   }
 
   /* Control button */
   .control-btn {
-    @apply p-2.5 rounded-lg text-white hover:bg-white/10 hover:text-arsy-red
-           transition-all duration-300 hover:scale-110 focus:ring-2
-           focus:ring-arsy-red focus:outline-none disabled:opacity-40
-           disabled:cursor-not-allowed disabled:hover:scale-100
-           disabled:hover:bg-transparent disabled:hover:text-white;
+    @apply p-2.5 rounded-lg text-white transition-all duration-300 
+           hover:scale-110 focus:ring-2 focus:outline-none
+           disabled:opacity-40 disabled:cursor-not-allowed 
+           disabled:hover:scale-100 disabled:hover:bg-transparent 
+           disabled:hover:text-white;
+  }
+
+  .control-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #DC2626;
   }
 
   /* Play/Pause button */
   .play-pause-btn {
-    @apply w-14 h-14 rounded-full bg-gradient-to-br from-arsy-red to-arsy-dark-red
-           flex items-center justify-center text-white text-2xl shadow-arsy-red
-           hover:scale-110 transition-transform duration-300 focus:ring-2
-           focus:ring-arsy-red focus:outline-none;
+    @apply w-14 h-14 rounded-full flex items-center justify-center 
+           text-white text-2xl hover:scale-110 transition-transform 
+           duration-300 focus:ring-2 focus:outline-none;
+    background: linear-gradient(135deg, #DC2626, #991B1B);
+    box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
   }
 
   /* Progress bar */
@@ -94,7 +127,8 @@
   }
 
   .progress-current {
-    @apply absolute h-full bg-gradient-to-r from-arsy-red to-pink-600 rounded-full;
+    @apply absolute h-full rounded-full;
+    background: linear-gradient(90deg, #DC2626, #F87171);
   }
 
   .progress-buffered {
@@ -103,29 +137,38 @@
 
   /* Volume slider */
   .volume-slider {
-    @apply w-24 h-1.5 bg-gray-700 rounded-full appearance-none cursor-pointer
-           [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-4
-           [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:rounded-full
-           [&::-webkit-slider-thumb]:bg-arsy-red [&::-webkit-slider-thumb]:shadow-lg
-           [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4
-           [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-arsy-red
-           [&::-moz-range-thumb]:border-0;
+    @apply w-24 h-1.5 bg-gray-700 rounded-full appearance-none cursor-pointer;
+  }
+
+  .volume-slider::-webkit-slider-thumb {
+    @apply appearance-none h-4 w-4 rounded-full;
+    background-color: #DC2626;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .volume-slider::-moz-range-thumb {
+    @apply h-4 w-4 rounded-full border-0;
+    background-color: #DC2626;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   }
 
   /* Spinner */
   .spinner {
-    @apply w-16 h-16 border-4 border-gray-800 border-t-arsy-red rounded-full
-           animate-spin-slow shadow-arsy-glow;
+    @apply w-16 h-16 border-4 border-gray-800 rounded-full;
+    border-top-color: #DC2626;
+    animation: spin 1.2s linear infinite;
+    box-shadow: 0 0 30px rgba(220, 38, 38, 0.3);
   }
 
   /* Toast notification */
   .toast {
     @apply fixed top-4 right-4 bg-gray-900 text-white px-6 py-3 rounded-xl
-           shadow-lg border-l-4 border-arsy-red transform translate-x-full
+           shadow-lg border-l-4 transform translate-x-full
            transition-transform duration-300 z-50 max-w-md;
+    border-left-color: #DC2626;
   }
 
   .toast.show {
-    @apply translate-x-0;
+    transform: translateX(0);
   }
 }
